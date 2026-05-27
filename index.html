@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C-Verse | Culture · Connect · Create</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   CSS VARIABLES & RESET
+============================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --gold: #F5B731;
+  --gold-light: #FFD166;
+  --gold-dim: rgba(245,183,49,0.15);
+  --blue-deep: #0A0E1A;
+  --blue-mid: #0D1526;
+  --blue-surface: #111B30;
+  --blue-card: #0F1929;
+  --purple: #6B4FE8;
+  --purple-light: #8B6EF5;
+  --cyan: #00D4FF;
+  --white: #F0F4FF;
+  --muted: #7A8BAA;
+  --border: rgba(245,183,49,0.2);
+  --border-subtle: rgba(255,255,255,0.06);
+  --font-display: 'Outfit', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --nav-h: 76px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-display);
+  background: var(--blue-deep);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ============================================
+   STAR CANVAS BACKGROUND
+============================================ */
+#star-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================
+   NAVIGATION
+============================================ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  z-index: 1000;
+  transition: background 0.4s, border-color 0.4s;
+}
+
+nav.scrolled {
+  background: rgba(10,14,26,0.92);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo img {
+  height: 44px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  transition: color 0.2s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0; right: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn-outline {
+  padding: 9px 22px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.btn-outline:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.btn-gold {
+  padding: 9px 22px;
+  border-radius: 6px;
+  background: var(--gold);
+  color: #0A0E1A;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  letter-spacing: 0.03em;
+}
+
+.btn-gold:hover {
+  background: var(--gold-light);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(245,183,49,0.3);
+}
+
+/* ============================================
+   HERO SECTION
+============================================ */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 40px 80px;
+  text-align: center;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Glowing orb background */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(107,79,232,0.35) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -55%);
+}
+
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(245,183,49,0.2) 0%, transparent 70%);
+  bottom: 10%; right: 10%;
+}
+
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(0,212,255,0.15) 0%, transparent 70%);
+  top: 20%; left: 5%;
+}
+
+/* Planet ring decoration */
+.hero-ring {
+  position: absolute;
+  width: 700px; height: 700px;
+  border: 1px solid rgba(245,183,49,0.08);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotateX(70deg);
+  animation: ringRotate 30s linear infinite;
+}
+
+.hero-ring-2 {
+  width: 900px; height: 900px;
+  border-color: rgba(107,79,232,0.06);
+  animation-duration: 45s;
+  animation-direction: reverse;
+}
+
+@keyframes ringRotate {
+  from { transform: translate(-50%, -50%) rotateX(70deg) rotateZ(0deg); }
+  to   { transform: translate(-50%, -50%) rotateX(70deg) rotateZ(360deg); }
+}
+
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  background: rgba(245,183,49,0.06);
+  animation: fadeUp 0.8s ease both;
+}
+
+.hero-tag::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero h1 {
+  font-size: clamp(48px, 7vw, 96px);
+  font-weight: 900;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+
+.hero h1 .line-1 { color: var(--white); }
+
+.hero h1 .line-2 {
+  background: linear-gradient(135deg, var(--gold) 0%, #FF8C42 50%, var(--purple-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: block;
+}
+
+.hero-slogan {
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: 0.35em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  animation: fadeUp 0.8s 0.15s ease both;
+}
+
+.hero-slogan span {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 640px;
+  line-height: 1.7;
+  margin: 0 auto 44px;
+  font-weight: 300;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.btn-hero-primary {
+  padding: 15px 36px;
+  background: var(--gold);
+  color: #0A0E1A;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-hero-primary:hover {
+  background: var(--gold-light);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(245,183,49,0.4);
+}
+
+.btn-hero-secondary {
+  padding: 15px 36px;
+  background: transparent;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-hero-secondary:hover {
+  border-color: var(--white);
+  background: rgba(255,255,255,0.05);
+}
+
+/* Stat strip */
+.hero-stats {
+  display: flex;
+  gap: 56px;
+  margin-top: 70px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-subtle);
+  animation: fadeUp 0.8s 0.45s ease both;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-num {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.hero-stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Scroll indicator */
+.scroll-hint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  animation: fadeUp 1s 0.8s ease both;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--gold), transparent);
+  animation: scrollAnim 2s ease-in-out infinite;
+}
+
+@keyframes scrollAnim {
+  0%, 100% { transform: scaleY(1); opacity: 1; }
+  50% { transform: scaleY(0.6); opacity: 0.4; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   SECTION BASE
+============================================ */
+section {
+  position: relative;
+  z-index: 1;
+}
+
+.section-label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+}
+
+.section-title {
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 18px;
+  color: var(--white);
+}
+
+.section-sub {
+  font-size: 17px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 560px;
+  font-weight: 300;
+}
+
+/* ============================================
+   PILLARS / WHAT WE DO
+============================================ */
+.pillars {
+  padding: 100px 60px;
+  background: var(--blue-mid);
+}
+
+.pillars-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.pillars-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 64px;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.pillar-card {
+  background: var(--blue-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 40px 36px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: default;
+}
+
+.pillar-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.pillar-card:hover {
+  border-color: rgba(245,183,49,0.25);
+  transform: translateY(-4px);
+}
+
+.pillar-card:hover::before { opacity: 1; }
+
+.pillar-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 24px;
+}
+
+.pillar-card:nth-child(1) .pillar-icon { background: rgba(107,79,232,0.2); }
+.pillar-card:nth-child(2) .pillar-icon { background: rgba(245,183,49,0.15); }
+.pillar-card:nth-child(3) .pillar-icon { background: rgba(0,212,255,0.12); }
+
+.pillar-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+}
+
+.pillar-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.pillar-body {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+.pillar-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pillar-features li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #A0B0CC;
+}
+
+.pillar-features li::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+
+/* ============================================
+   AI EDUCATION SECTION
+============================================ */
+.education {
+  padding: 100px 60px;
+  background: var(--blue-deep);
+}
+
+.education-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.edu-visual {
+  position: relative;
+}
+
+.edu-card-stack {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+}
+
+.edu-card {
+  position: absolute;
+  border-radius: 16px;
+  padding: 28px 32px;
+  border: 1px solid var(--border-subtle);
+}
+
+.edu-card-main {
+  background: var(--blue-surface);
+  width: 100%;
+  top: 0; left: 0;
+  z-index: 3;
+}
+
+.edu-card-float-1 {
+  background: linear-gradient(135deg, rgba(107,79,232,0.3), rgba(107,79,232,0.05));
+  border-color: rgba(107,79,232,0.3);
+  width: 75%;
+  bottom: -28px; right: -24px;
+  z-index: 1;
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.edu-card-float-2 {
+  background: linear-gradient(135deg, rgba(245,183,49,0.2), rgba(245,183,49,0.03));
+  border-color: rgba(245,183,49,0.25);
+  width: 55%;
+  bottom: -14px; left: -20px;
+  z-index: 2;
+  animation: floatSlow 8s ease-in-out infinite reverse;
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.edu-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: rgba(245,183,49,0.15);
+  border: 1px solid rgba(245,183,49,0.3);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+
+.edu-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+
+.edu-card-sub {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.edu-cert-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.edu-cert {
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+}
+
+.course-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.course-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.course-item:hover { background: rgba(255,255,255,0.07); }
+
+.course-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.course-text {
+  font-size: 14px;
+  color: #C8D4E8;
+}
+
+.course-tag {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
+   AI PRODUCTION SECTION
+============================================ */
+.production {
+  padding: 100px 60px;
+  background: var(--blue-mid);
+  overflow: hidden;
+}
+
+.production-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.production-header {
+  margin-bottom: 60px;
+}
+
+.production-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.prod-card {
+  background: var(--blue-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 28px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.prod-card:hover {
+  border-color: rgba(245,183,49,0.3);
+  transform: translateY(-3px);
+}
+
+.prod-card-glow {
+  position: absolute;
+  bottom: -30px; right: -30px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.prod-card:hover .prod-card-glow { opacity: 1; }
+
+.prod-card:nth-child(1) .prod-card-glow { background: radial-gradient(circle, rgba(107,79,232,0.4), transparent); }
+.prod-card:nth-child(2) .prod-card-glow { background: radial-gradient(circle, rgba(245,183,49,0.3), transparent); }
+.prod-card:nth-child(3) .prod-card-glow { background: radial-gradient(circle, rgba(0,212,255,0.3), transparent); }
+.prod-card:nth-child(4) .prod-card-glow { background: radial-gradient(circle, rgba(255,100,100,0.25), transparent); }
+
+.prod-icon {
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.prod-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.prod-body {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Full-width feature highlight */
+.prod-feature-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.prod-feature-big {
+  background: linear-gradient(135deg, rgba(107,79,232,0.15), rgba(10,14,26,0.8));
+  border: 1px solid rgba(107,79,232,0.25);
+  border-radius: 16px;
+  padding: 48px 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 260px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.prod-feature-big:hover {
+  border-color: rgba(107,79,232,0.5);
+}
+
+.prod-feature-big-2 {
+  background: linear-gradient(135deg, rgba(245,183,49,0.1), rgba(10,14,26,0.8));
+  border-color: rgba(245,183,49,0.2);
+}
+
+.prod-feature-big-2:hover {
+  border-color: rgba(245,183,49,0.45);
+}
+
+.prod-feature-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-family: var(--font-mono);
+}
+
+.prod-feature-label.purple { color: var(--purple-light); }
+.prod-feature-label.gold { color: var(--gold); }
+
+.prod-feature-h {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 14px;
+}
+
+.prod-feature-p {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.prod-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+
+.prod-tag {
+  padding: 5px 12px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.prod-tag.purple {
+  background: rgba(107,79,232,0.15);
+  border-color: rgba(107,79,232,0.35);
+  color: var(--purple-light);
+}
+
+.prod-tag.gold {
+  background: rgba(245,183,49,0.12);
+  border-color: rgba(245,183,49,0.3);
+  color: var(--gold);
+}
+
+/* ============================================
+   FOUNDERS SECTION
+============================================ */
+.founders {
+  padding: 100px 60px;
+  background: var(--blue-deep);
+}
+
+.founders-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.founders-header {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.founders-header .section-sub {
+  margin: 0 auto;
+}
+
+.founders-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.founder-card {
+  background: var(--blue-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 36px 30px;
+  text-align: center;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.founder-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(245,183,49,0.06), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.founder-card:hover {
+  border-color: rgba(245,183,49,0.3);
+  transform: translateY(-4px);
+}
+
+.founder-card:hover::before { opacity: 1; }
+
+.founder-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  border: 2px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  background: var(--blue-surface);
+}
+
+.founder-avatar-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--gold), transparent, var(--purple)) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+.founder-emoji {
+  font-size: 30px;
+  line-height: 1;
+}
+
+.founder-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.founder-title {
+  font-size: 13px;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.04em;
+}
+
+.founder-region {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  margin-bottom: 16px;
+}
+
+.founder-bio {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ============================================
+   PARTNERS / ECOSYSTEM SECTION
+============================================ */
+.partners {
+  padding: 80px 60px;
+  background: var(--blue-mid);
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.partners-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.partners h3 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 44px;
+}
+
+.partners-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.partner-badge {
+  padding: 12px 28px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.partner-badge:hover {
+  border-color: rgba(245,183,49,0.25);
+  color: var(--white);
+  background: rgba(245,183,49,0.06);
+}
+
+/* ============================================
+   GOVERNMENT GRANTS MARQUEE
+============================================ */
+.grants-strip {
+  padding: 24px 0;
+  background: rgba(245,183,49,0.05);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+
+.grants-track {
+  display: inline-flex;
+  gap: 0;
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.grant-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 36px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.grant-item::before {
+  content: '★';
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+/* ============================================
+   CTA SECTION
+============================================ */
+.cta-section {
+  padding: 120px 60px;
+  background: var(--blue-deep);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-orb {
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(107,79,232,0.25), transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+.cta-section .section-title { max-width: 700px; margin: 0 auto 14px; }
+.cta-section .section-sub { margin: 0 auto 48px; text-align: center; }
+
+.cta-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.cta-note {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ============================================
+   FOOTER
+============================================ */
+footer {
+  background: var(--blue-mid);
+  border-top: 1px solid var(--border-subtle);
+  padding: 64px 60px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+
+.footer-brand img {
+  height: 38px;
+  margin-bottom: 16px;
+}
+
+.footer-brand p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 260px;
+}
+
+.footer-col h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col ul li a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-col ul li a:hover { color: var(--gold); }
+
+.footer-slogan {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 16px;
+}
+
+.footer-slogan span { color: var(--gold); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 28px;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copyright {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-links a {
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--gold); }
+
+/* ============================================
+   SCROLL REVEAL
+============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   MOBILE NAV TOGGLE
+============================================ */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 5px;
+  padding: 4px;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media (max-width: 1024px) {
+  .pillars-grid { grid-template-columns: 1fr 1fr; }
+  .founders-grid { grid-template-columns: 1fr 1fr; }
+  .production-grid { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  nav { padding: 0 32px; }
+}
+
+@media (max-width: 768px) {
+  nav { padding: 0 24px; }
+  .nav-links, .nav-cta { display: none; }
+  .nav-toggle { display: flex; }
+  .pillars { padding: 70px 24px; }
+  .pillars-grid { grid-template-columns: 1fr; }
+  .education { padding: 70px 24px; }
+  .education-inner { grid-template-columns: 1fr; }
+  .production { padding: 70px 24px; }
+  .production-grid { grid-template-columns: 1fr; }
+  .prod-feature-row { grid-template-columns: 1fr; }
+  .founders { padding: 70px 24px; }
+  .founders-grid { grid-template-columns: 1fr; }
+  .partners { padding: 60px 24px; }
+  .cta-section { padding: 80px 24px; }
+  footer { padding: 48px 24px 32px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .hero { padding: 100px 24px 60px; }
+  .hero-stats { gap: 32px; }
+  .hero-ring, .hero-ring-2 { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Star Canvas -->
+<canvas id="star-canvas"></canvas>
+
+<!-- ========== NAVIGATION ========== -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">
+    <!-- EDITABLE: Replace with your logo path -->
+    <img src="cverse-logo.png" alt="C-Verse" onerror="this.style.cssText='font-family:Outfit;font-size:22px;font-weight:900;color:#F5B731;text-decoration:none'; this.outerHTML='<span style=\'font-family:Outfit;font-size:22px;font-weight:900;color:#F5B731\'>C-Verse</span>'">
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#production">Production</a></li>
+    <li><a href="#founders">Team</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+
+  <div class="nav-cta">
+    <a href="#contact" class="btn-outline">Get in Touch</a>
+    <a href="#education" class="btn-gold">Explore Courses</a>
+  </div>
+
+  <button class="nav-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <div class="hero-orb orb-1"></div>
+  <div class="hero-orb orb-2"></div>
+  <div class="hero-orb orb-3"></div>
+  <div class="hero-ring"></div>
+  <div class="hero-ring hero-ring-2"></div>
+
+  <div class="hero-tag">🌟 Malaysia's AI Creative Powerhouse</div>
+
+  <h1>
+    <span class="line-1">Where AI Meets</span>
+    <span class="line-2">Creative Vision</span>
+  </h1>
+
+  <!-- EDITABLE: Slogan -->
+  <div class="hero-slogan">
+    <span>Culture</span> · <span>Connect</span> · <span>Create</span>
+  </div>
+
+  <!-- EDITABLE: Hero description -->
+  <p>
+    C-Verse (星域国际) is a next-generation platform bridging AI education, film production, and Web3 innovation — empowering creators, educators, and enterprises across Southeast Asia.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#education" class="btn-hero-primary">
+      Explore Our Programs ↗
+    </a>
+    <a href="#founders" class="btn-hero-secondary">
+      Meet the Team →
+    </a>
+  </div>
+
+  <!-- EDITABLE: Key stats -->
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num">3</div>
+      <div class="hero-stat-label">Core Pillars</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">Regional Leaders</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">SEA</div>
+      <div class="hero-stat-label">Market Focus</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">HRD</div>
+      <div class="hero-stat-label">Corp Certified</div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ========== GRANTS STRIP ========== -->
+<div class="grants-strip">
+  <div class="grants-track">
+    <span class="grant-item">HRD Corp Certified Training Provider</span>
+    <span class="grant-item">NCAICI / MyMahir National AI Credentials</span>
+    <span class="grant-item">JPK SKM Certification</span>
+    <span class="grant-item">SBL-KHAS SME Grants Up to 100% Subsidy</span>
+    <span class="grant-item">Jelajah AI MyMahir Programme</span>
+    <span class="grant-item">MDEC / MyDIGITAL AI Grants</span>
+    <span class="grant-item">KPM Approved Co-Curricular Activities</span>
+    <span class="grant-item">MSC Malaysia Status — 100% Tax Deduction</span>
+    <span class="grant-item">HRD Corp Certified Training Provider</span>
+    <span class="grant-item">NCAICI / MyMahir National AI Credentials</span>
+    <span class="grant-item">JPK SKM Certification</span>
+    <span class="grant-item">SBL-KHAS SME Grants Up to 100% Subsidy</span>
+    <span class="grant-item">Jelajah AI MyMahir Programme</span>
+    <span class="grant-item">MDEC / MyDIGITAL AI Grants</span>
+    <span class="grant-item">KPM Approved Co-Curricular Activities</span>
+    <span class="grant-item">MSC Malaysia Status — 100% Tax Deduction</span>
+  </div>
+</div>
+
+<!-- ========== THREE PILLARS ========== -->
+<section class="pillars" id="about">
+  <div class="pillars-inner">
+    <div class="pillars-header reveal">
+      <div>
+        <div class="section-label">// What We Do</div>
+        <h2 class="section-title">Three Pillars.<br>One Ecosystem.</h2>
+      </div>
+      <p class="section-sub">
+        C-Verse integrates AI-powered education, professional video production, and Web3 infrastructure — creating a self-sustaining creative economy for the next generation.
+      </p>
+    </div>
+
+    <div class="pillars-grid">
+      <!-- EDITABLE: Pillar 1 -->
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">🎓</div>
+        <div class="pillar-num">01 //</div>
+        <div class="pillar-title">AI Creative Education</div>
+        <p class="pillar-body">
+          Skill-based, credential-backed AI training for students, professionals, and enterprises. From short courses to full programmes — all government-subsidy eligible.
+        </p>
+        <ul class="pillar-features">
+          <li>AI Video & Film Production</li>
+          <li>AI Art & Animation</li>
+          <li>AI Marketing & Branding</li>
+          <li>Enterprise AI Upskilling</li>
+          <li>Youth & School Programmes</li>
+        </ul>
+      </div>
+
+      <!-- EDITABLE: Pillar 2 -->
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">🎬</div>
+        <div class="pillar-num">02 //</div>
+        <div class="pillar-title">AI Production House</div>
+        <p class="pillar-body">
+          End-to-end AI-assisted video and film production — from short dramas and commercials to brand IP, Installation Art, and virtual production.
+        </p>
+        <ul class="pillar-features">
+          <li>Short Drama & Series</li>
+          <li>Brand & Commercial Production</li>
+          <li>AI-Generated Visual Content</li>
+          <li>Exhibition & Installation Art</li>
+          <li>Corporate IP Development</li>
+        </ul>
+      </div>
+
+      <!-- EDITABLE: Pillar 3 -->
+      <div class="pillar-card reveal">
+        <div class="pillar-icon">⛓️</div>
+        <div class="pillar-num">03 //</div>
+        <div class="pillar-title">Web3 Services</div>
+        <p class="pillar-body">
+          Full-stack Web3 infrastructure, NFT platforms, DeFi solutions, and digital asset economy design — bridging traditional brands into the decentralised future.
+        </p>
+        <ul class="pillar-features">
+          <li>Blockchain Development</li>
+          <li>NFT Marketplace & Platforms</li>
+          <li>Token Economy Design</li>
+          <li>DApp Development</li>
+          <li>Metaverse & Digital Space</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== AI EDUCATION SECTION ========== -->
+<section class="education" id="education">
+  <div class="education-inner">
+    <div class="edu-visual reveal">
+      <div class="edu-card-stack">
+        <div class="edu-card edu-card-float-2">
+          <div style="font-size:13px;color:var(--gold);font-weight:700;">📊 Government Grants</div>
+          <div style="font-size:22px;font-weight:800;color:var(--white);margin-top:8px;">Up to 100%</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">SBL-KHAS Subsidy Available</div>
+        </div>
+        <div class="edu-card edu-card-float-1">
+          <div style="font-size:12px;color:var(--purple-light);font-weight:600;">🎓 Certifications</div>
+          <div style="font-size:14px;font-weight:700;color:var(--white);margin-top:8px;">HRD Corp · NCAICI · JPK</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">MyMahir · KPM Approved</div>
+        </div>
+        <div class="edu-card edu-card-main">
+          <div class="edu-badge">✦ AI Education</div>
+          <div class="edu-card-title">Skills + Credentials + Careers</div>
+          <div class="edu-card-sub">Three pathways for every learner</div>
+          <div class="edu-cert-row">
+            <span class="edu-cert">SHORT COURSE</span>
+            <span class="edu-cert">SEMESTER PRG</span>
+            <span class="edu-cert">ENTERPRISE</span>
+          </div>
+          <div class="course-list">
+            <div class="course-item">
+              <div class="course-dot" style="background:#8B6EF5"></div>
+              <span class="course-text">AI Video & Film Production</span>
+              <span class="course-tag" style="background:rgba(139,110,245,0.15);color:#8B6EF5;border:1px solid rgba(139,110,245,0.3);">HOT</span>
+            </div>
+            <div class="course-item">
+              <div class="course-dot" style="background:var(--gold)"></div>
+              <span class="course-text">AI Art, Illustration & Animation</span>
+              <span class="course-tag" style="background:rgba(245,183,49,0.12);color:var(--gold);border:1px solid rgba(245,183,49,0.3);">NEW</span>
+            </div>
+            <div class="course-item">
+              <div class="course-dot" style="background:var(--cyan)"></div>
+              <span class="course-text">AI Marketing & Branding</span>
+            </div>
+            <div class="course-item">
+              <div class="course-dot" style="background:#4CAF50"></div>
+              <span class="course-text">Web3 & Digital Economy</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="section-label">// AI Creative Education</div>
+      <h2 class="section-title">Learn AI.<br>Create the Future.</h2>
+      <!-- EDITABLE: Education description -->
+      <p class="section-sub" style="margin-bottom:32px;">
+        Our programmes combine technical AI skills with creative arts — producing graduates who can both understand and direct AI tools for real-world production and business.
+      </p>
+
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(107,79,232,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">📋</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">Short Skills Courses (2 semesters)</div>
+            <div style="font-size:13px;color:var(--muted);">Online + offline, JMORA certified, employment-focused pathway</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(245,183,49,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🏫</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">Semester Programmes (66 days+)</div>
+            <div style="font-size:13px;color:var(--muted);">Long-form career path with Baidu certification & job placement</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(0,212,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🏢</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">Enterprise & Corporate Training</div>
+            <div style="font-size:13px;color:var(--muted);">HRD Corp claimable, B2B upskilling, customised AI workshops</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,100,100,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:18px;">🎒</div>
+          <div>
+            <div style="font-size:15px;font-weight:700;color:var(--white);margin-bottom:4px;">Youth & School Programmes</div>
+            <div style="font-size:13px;color:var(--muted);">KPM co-curricular, PAJSK credits, B40 subsidies available</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:36px;">
+        <a href="#contact" class="btn-hero-primary" style="font-size:14px;padding:13px 28px;">Explore All Courses ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== AI PRODUCTION SECTION ========== -->
+<section class="production" id="production">
+  <div class="production-inner">
+    <div class="production-header reveal">
+      <div class="section-label">// AI Production</div>
+      <h2 class="section-title">From Script to Screen,<br>Powered by AI.</h2>
+      <p class="section-sub">
+        Professional-grade AI-assisted video production, brand IP creation, and immersive installation art — built on proprietary partnerships with Baidu, Tencent Video, and leading studios.
+      </p>
+    </div>
+
+    <div class="production-grid reveal">
+      <div class="prod-card">
+        <div class="prod-card-glow"></div>
+        <div class="prod-icon">🎞️</div>
+        <div class="prod-title">Short Drama & Series</div>
+        <p class="prod-body">AI-accelerated short-form drama production with distribution on major Chinese streaming platforms.</p>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-glow"></div>
+        <div class="prod-icon">📺</div>
+        <div class="prod-title">Brand & Commercial Video</div>
+        <p class="prod-body">Brand advertising, live streaming content, and social media creative — AI-powered for speed and scale.</p>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-glow"></div>
+        <div class="prod-icon">🎨</div>
+        <div class="prod-title">Installation Art</div>
+        <p class="prod-body">Commercial and cultural installation art for airports, shopping malls, and exhibition venues across 20+ airports in China.</p>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-glow"></div>
+        <div class="prod-icon">🤖</div>
+        <div class="prod-title">AI Visual Content</div>
+        <p class="prod-body">LoRA model training, 4K AI illustration, 3D character generation, and multi-frame video creation at production scale.</p>
+      </div>
+    </div>
+
+    <div class="prod-feature-row reveal">
+      <!-- EDITABLE: Big feature 1 -->
+      <div class="prod-feature-big">
+        <div>
+          <div class="prod-feature-label purple">// Virtual Production</div>
+          <div class="prod-feature-h">Cinema-Grade<br>Virtual Sets</div>
+          <p class="prod-feature-p">
+            Multi-camera virtual shooting with AI pre-visualisation, real-time 3D storyboarding, and full on-set execution support.
+          </p>
+        </div>
+        <div class="prod-tags">
+          <span class="prod-tag purple">LED Volume</span>
+          <span class="prod-tag purple">AI Pre-vis</span>
+          <span class="prod-tag purple">3D Previsualization</span>
+        </div>
+      </div>
+
+      <!-- EDITABLE: Big feature 2 -->
+      <div class="prod-feature-big prod-feature-big-2">
+        <div>
+          <div class="prod-feature-label gold">// IP Development</div>
+          <div class="prod-feature-h">Cultural IP &<br>Brand Universe</div>
+          <p class="prod-feature-p">
+            From 2nd-generation character heritage to full Web3 digital asset integration — creating IPs with cross-border commercial reach via Western Market Group partnership.
+          </p>
+        </div>
+        <div class="prod-tags">
+          <span class="prod-tag gold">Cultural Fusion</span>
+          <span class="prod-tag gold">Web3 Assets</span>
+          <span class="prod-tag gold">O2O Ecosystem</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOUNDERS SECTION ========== -->
+<section class="founders" id="founders">
+  <div class="founders-inner">
+    <div class="founders-header reveal">
+      <div class="section-label">// Our Team</div>
+      <h2 class="section-title">Led by Regional Leaders</h2>
+      <p class="section-sub">
+        Six industry veterans bringing deep expertise across AI, film production, education, and technology from across the Asia Pacific region.
+      </p>
+    </div>
+
+    <div class="founders-grid">
+      <!-- ===================================================
+           EDITABLE FOUNDERS — Replace names, titles, bios
+      =================================================== -->
+      <div class="founder-card reveal">
+        <div class="founder-avatar">
+          <span class="founder-emoji">👤</span>
+          <div class="founder-avatar-ring"></div>
+        </div>
+        <!-- EDITABLE -->
+        <div class="founder-name">Founder Name</div>
+        <div class="founder-title">Co-Founder & CEO</div>
+        <div class="founder-region">📍 Malaysia · Kuala Lumpur</div>
+        <p class="founder-bio">
+          Regional leader with expertise in AI strategy, digital transformation, and creative economy development across Southeast Asia.
+        </p>
+      </div>
+
+      <div class="founder-card reveal">
+        <div class="founder-avatar">
+          <span class="founder-emoji">👤</span>
+          <div class="founder-avatar-ring"></div>
+        </div>
+        <!-- EDITABLE -->
+        <div class="founder-name">Founder Name</div>
+        <div class="founder-title">Co-Founder & COO</div>
+        <div class="founder-region">📍 Malaysia · Penang</div>
+        <p class="founder-bio">
+          Veteran in creative production and media management with deep networks in Chinese entertainment and streaming platforms.
+        </p>
+      </div>
+
+      <div class="founder-card reveal">
+        <div class="founder-avatar">
+          <span class="founder-emoji">👤</span>
+          <div class="founder-avatar-ring"></div>
+        </div>
+        <!-- EDITABLE -->
+        <div class="founder-name">Founder Name</div>
+        <div class="founder-title">Head of AI Education</div>
+        <div class="founder-region">📍 Malaysia · Johor</div>
+        <p class="founder-bio">
+          Certified HRD Corp trainer and NCAICI accredited educator with experience designing AI curriculum for enterprise and youth markets.
+        </p>
+      </div>
+
+      <div class="founder-card reveal">
+        <div class="founder-avatar">
+          <span class="founder-emoji">👤</span>
+          <div class="founder-avatar-ring"></div>
+        </div>
+        <!-- EDITABLE -->
+        <div class="founder-name">Founder Name</div>
+        <div class="founder-title">Head of Production</div>
+        <div class="founder-region">📍 Singapore / Malaysia</div>
+        <p class="founder-bio">
+          Award-winning film and commercial director specialising in AI-assisted production pipelines and virtual cinematography.
+        </p>
+      </div>
+
+      <div class="founder-card reveal">
+        <div class="founder-avatar">
+          <span class="founder-emoji">👤</span>
+          <div class="founder-avatar-ring"></div>
+        </div>
+        <!-- EDITABLE -->
+        <div class="founder-name">Founder Name</div>
+        <div class="founder-title">Head of Web3 & Tech</div>
+        <div class="founder-region">📍 Malaysia · KL</div>
+        <p class="founder-bio">
+          Blockchain architect and full-stack Web3 developer with experience building NFT platforms, DeFi protocols, and tokenised ecosystems.
+        </p>
+      </div>
+
+      <div class="founder-card reveal">
+        <div class="founder-avatar">
+          <span class="founder-emoji">👤</span>
+          <div class="founder-avatar-ring"></div>
+        </div>
+        <!-- EDITABLE -->
+        <div class="founder-name">Founder Name</div>
+        <div class="founder-title">Chief Creative Officer</div>
+        <div class="founder-region">📍 Malaysia · Sabah / Sarawak</div>
+        <p class="founder-bio">
+          Visual artist and IP strategist specialising in cultural fusion content, digital brand identity, and cross-border creative campaigns.
+        </p>
+      </div>
+      <!-- END FOUNDERS -->
+    </div>
+  </div>
+</section>
+
+<!-- ========== PARTNERS ========== -->
+<section class="partners">
+  <div class="partners-inner reveal">
+    <h3>Strategic Partners & Ecosystem</h3>
+    <div class="partners-row">
+      <!-- EDITABLE: Partner names -->
+      <div class="partner-badge">百度 Baidu</div>
+      <div class="partner-badge">文化传信 JV</div>
+      <div class="partner-badge">西部机场集团</div>
+      <div class="partner-badge">HKIT</div>
+      <div class="partner-badge">JMORA</div>
+      <div class="partner-badge">海豚 AI</div>
+      <div class="partner-badge">HRD Corp</div>
+      <div class="partner-badge">NCAICI</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-section" id="contact">
+  <div class="cta-orb"></div>
+  <div style="position:relative;z-index:2;">
+    <div class="section-label reveal" style="display:block;margin-bottom:16px;">// Get Started</div>
+    <h2 class="section-title reveal">
+      Ready to Create<br>with AI?
+    </h2>
+    <!-- EDITABLE: CTA sub -->
+    <p class="section-sub reveal">
+      Whether you're an individual looking to upskill, a brand seeking AI production, or an enterprise ready for digital transformation — C-Verse is your partner.
+    </p>
+    <div class="cta-buttons reveal">
+      <a href="mailto:hello@cverse.com" class="btn-hero-primary">Contact Us ↗</a>
+      <a href="#education" class="btn-hero-secondary">View Programmes →</a>
+    </div>
+    <!-- EDITABLE: Contact note -->
+    <p class="cta-note reveal">📍 Malaysia · Singapore · Regional Expansion in progress</p>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="cverse-logo.png" alt="C-Verse" onerror="this.style.display='none'">
+        <!-- EDITABLE: Footer description -->
+        <p>C-Verse (星域国际) — Malaysia's AI Creative Ecosystem, bridging education, production, and Web3 innovation across Southeast Asia.</p>
+        <div class="footer-slogan" style="margin-top:16px;">
+          <span>Culture</span> · <span>Connect</span> · <span>Create</span>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Education</h4>
+        <ul>
+          <li><a href="#">AI Video Production</a></li>
+          <li><a href="#">AI Art & Animation</a></li>
+          <li><a href="#">AI Marketing</a></li>
+          <li><a href="#">Enterprise Training</a></li>
+          <li><a href="#">Youth Programmes</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Production</h4>
+        <ul>
+          <li><a href="#">Short Drama</a></li>
+          <li><a href="#">Brand Video</a></li>
+          <li><a href="#">Installation Art</a></li>
+          <li><a href="#">IP Development</a></li>
+          <li><a href="#">Virtual Production</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <!-- EDITABLE: Footer links -->
+          <li><a href="#about">About C-Verse</a></li>
+          <li><a href="#founders">Our Team</a></li>
+          <li><a href="#">Partnerships</a></li>
+          <li><a href="#contact">Contact Us</a></li>
+          <li><a href="#">Investor Relations</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <!-- EDITABLE: Copyright -->
+      <div class="footer-copyright">© 2025 C-Verse International (星域国际). All rights reserved.</div>
+      <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================================
+   JAVASCRIPT
+============================================ -->
+<script>
+/* ---- Star canvas ---- */
+(function() {
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let W, H;
+
+  function resize() {
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+    const count = Math.floor((W * H) / 6000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.4 + 0.2,
+        alpha: Math.random() * 0.6 + 0.1,
+        speed: Math.random() * 0.3 + 0.05,
+        twinkle: Math.random() * Math.PI * 2,
+        twinkleSpeed: Math.random() * 0.02 + 0.005
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      s.twinkle += s.twinkleSpeed;
+      const alpha = s.alpha * (0.6 + 0.4 * Math.sin(s.twinkle));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200, 215, 255, ${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createStars();
+  draw();
+  window.addEventListener('resize', () => { resize(); createStars(); });
+})();
+
+/* ---- Nav scroll ---- */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('main-nav');
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+/* ---- Scroll reveal ---- */
+const revealEls = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), 80 * (Array.from(revealEls).indexOf(entry.target) % 4));
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+revealEls.forEach(el => observer.observe(el));
+
+/* ---- Smooth scroll ---- */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
